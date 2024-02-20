@@ -27,12 +27,14 @@ const frameMetadata = getFrameMetadata({
   postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
 });
 
+let title:string = 'Kosk Giveaway'
+let description:string = 'Enjoy!'
 export const metadata: Metadata = {
-  title: 'Kosk Giveaway',
-  description: 'LFG',
+  title: title,
+  description: description,
   openGraph: {
-    title: 'Kosk Giveaway',
-    description: 'LFG',
+    title: title,
+    description: description,
     images: [`${NEXT_PUBLIC_URL}/park-1.png`],
   },
   other: {
