@@ -31,10 +31,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   fid = message?.interactor.fid;
   const insertQuery = sql`
   INSERT INTO mybook (name)
-  VALUES (${fid}})
+  VALUES (${fid})
   `;
   const result = await insertQuery
-  
+
   let label:string = "";
   // if(following && liked && recasted){
   if(true){
