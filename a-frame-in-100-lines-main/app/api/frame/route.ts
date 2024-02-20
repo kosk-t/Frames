@@ -29,11 +29,15 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   let fid:number | undefined = 0;
   fid = message?.interactor.fid;
-  const insertQuery = sql`
-  INSERT INTO mybook (name)
-  VALUES (${fid})
-  `;
-  const result = await insertQuery
+  
+  const { rows } = await sql`SELECT * FROM mybook where name=${fid}`;
+  if(rows.length == 0){
+    const insertQuery = sql`
+    INSERT INTO mybook (name)
+    VALUES (${fid})
+    `;
+    const result = await insertQuery
+  }
 
   let label:string = "";
   // if(following && liked && recasted){
