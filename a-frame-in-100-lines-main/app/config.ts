@@ -1,4 +1,4 @@
 export const AppConfig = {
-    NEXT_PUBLIC_URL: 'https://frames-ehif.vercel.app',
+    NEXT_PUBLIC_URL: process.env.PUBLIC_URL,
     API_KEY: ''
 }
