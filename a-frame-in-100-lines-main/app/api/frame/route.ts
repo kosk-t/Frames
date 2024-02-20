@@ -20,7 +20,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   recasted = message?.recasted;
   let label:string = "";
   // if(following && liked && recasted){
-  if(liked){
+  if(true){
     label = "Thanks!";
   }else{
     label = "Please Follow & Like & Recast, then Register Giveaway!"
