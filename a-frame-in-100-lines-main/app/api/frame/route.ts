@@ -1,6 +1,6 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
-import { NEXT_PUBLIC_URL } from '../../config';
+import { AppConfig } from '../../config';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = '';
@@ -14,17 +14,17 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   if (isValid) {
     accountAddress = message.interactor.verified_accounts[0];
-    
+
   }
   following = message?.following;
   liked = message?.liked;
   recasted = message?.recasted;
   let label:string = "";
-  // if(following && liked && recasted){
-  if(true){
+  if(following && liked && recasted){
+  // if(true){
     label = "Thanks!";
   }else{
-    label = "Please Follow & Like & Recast, then Register Giveaway!"
+    label = "Register!"
   }
 
   // if (message?.input) {
@@ -44,11 +44,16 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         {
           label: label,
         },
+        {
+          action: 'link',
+          label: 'Follow @Kosk',
+          target: 'https://warpcast.com/kosk',
+        },
       ],
       image: {
-        src: `${NEXT_PUBLIC_URL}/park-1.png`,
+        src: `${AppConfig.NEXT_PUBLIC_URL}/park-1.png`,
       },
-      postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+      postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame`,
     }),
   );
 }

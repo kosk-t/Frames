@@ -1,11 +1,11 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
-import { NEXT_PUBLIC_URL } from './config';
+import { AppConfig } from './config';
 
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'Register Giveaway!',
+      label: 'Register!',
     },
     {
       action: 'link',
@@ -18,13 +18,13 @@ const frameMetadata = getFrameMetadata({
     // },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/park-3.png`,
+    src: `${AppConfig.NEXT_PUBLIC_URL}/park-3.png`,
     aspectRatio: '1:1',
   },
   // input: {
   //   text: 'Tell me a boat story',
   // },
-  postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+  postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame`,
 });
 
 let title:string = 'Kosk Giveaway'
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: title,
     description: description,
-    images: [`${NEXT_PUBLIC_URL}/park-1.png`],
+    images: [`${AppConfig.NEXT_PUBLIC_URL}/park-1.png`],
   },
   other: {
     ...frameMetadata,
