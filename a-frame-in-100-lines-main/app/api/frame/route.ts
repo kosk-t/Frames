@@ -4,7 +4,7 @@ import { AppConfig } from '../../config';
 import { sql } from "@vercel/postgres";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
-  const { rows } = await sql`SELECT * FROM myboook`;
+  const { rows } = await sql`SELECT * FROM mybook`;
   let name = "";
   rows.forEach(element => {
     name = element.name;
