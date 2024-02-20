@@ -14,6 +14,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   if (isValid) {
     accountAddress = message.interactor.verified_accounts[0];
+    
   }
   following = message?.following;
   liked = message?.liked;
