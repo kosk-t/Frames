@@ -7,11 +7,11 @@ const frameMetadata = getFrameMetadata({
     {
       label: 'Check Status',
     },
-    // {
-    //   action: 'link',
-    //   label: 'Link to Google',
-    //   target: 'https://www.google.com',
-    // },
+    {
+      action: 'link',
+      label: 'Follow @Kosk',
+      target: 'https://warpcast.com/kosk',
+    },
     // {
     //   label: 'Redirect to pictures',
     //   action: 'post_redirect',
