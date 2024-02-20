@@ -1,8 +1,15 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { AppConfig } from '../../config';
+import { sql } from "@vercel/postgres";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
+  const { rows } = await sql`SELECT * FROM myboook`;
+  let name = "";
+  rows.forEach(element => {
+    name = element.name;
+  });
+
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
   let liked: boolean | undefined = false;
@@ -20,9 +27,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   liked = message?.liked;
   recasted = message?.recasted;
   let label:string = "";
-  if(following && liked && recasted){
-  // if(true){
-    label = "Thnks!";
+  // if(following && liked && recasted){
+  if(true){
+    label = "Thanks!" + name;
   }else{
     label = "Register!"
   }
