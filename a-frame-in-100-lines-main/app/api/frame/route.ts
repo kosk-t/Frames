@@ -4,11 +4,12 @@ import { AppConfig } from '../../config';
 import { sql } from "@vercel/postgres";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
-  const { rows } = await sql`SELECT * FROM mybook`;
-  let name = "";
-  rows.forEach(element => {
-    name = element.name;
-  });
+  // const { rows } = await sql`SELECT * FROM mybook`;
+
+  // let name = "";
+  // rows.forEach(element => {
+  //   name = element.name;
+  // });
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
@@ -21,15 +22,23 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   if (isValid) {
     accountAddress = message.interactor.verified_accounts[0];
-
   }
   following = message?.following;
   liked = message?.liked;
   recasted = message?.recasted;
+
+  let fid:number | undefined = 0;
+  fid = message?.interactor.fid;
+  const insertQuery = sql`
+  INSERT INTO mybook (name)
+  VALUES (${fid}})
+  `;
+  const result = await insertQuery
+  
   let label:string = "";
   // if(following && liked && recasted){
   if(true){
-    label = "Thanks!" + name;
+    label = "Thanks!";
   }else{
     label = "Register!"
   }
