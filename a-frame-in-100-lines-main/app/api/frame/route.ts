@@ -40,7 +40,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     getFrameHtmlResponse({
       buttons: [
         {
-          label: `Your Address: ${accountAddress}`,
+          label: label,
         },
       ],
       image: {
