@@ -40,11 +40,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   }
 
   let label:string = "";
+  let post_url:string = "";
   // if(following && liked && recasted){
   if(true){
     label = "Thanks!";
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
   }else{
     label = "Register!"
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
   }
 
   // if (message?.input) {
@@ -73,7 +76,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       image: {
         src: `${AppConfig.NEXT_PUBLIC_URL}/park-1.png`,
       },
-      postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame`,
+      postUrl: post_url,
     }),
   );
 }
