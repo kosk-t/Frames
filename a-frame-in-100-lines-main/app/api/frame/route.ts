@@ -22,7 +22,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   let label:string = "";
   if(following && liked && recasted){
   // if(true){
-    label = "Thanks!";
+    label = "Thnks!";
   }else{
     label = "Register!"
   }
