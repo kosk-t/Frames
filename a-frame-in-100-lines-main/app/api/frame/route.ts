@@ -2,6 +2,8 @@ import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/o
 import { NextRequest, NextResponse } from 'next/server';
 import { AppConfig } from '../../config';
 import { sql } from "@vercel/postgres";
+import { Profile, ProfileResponse, getProfileData } from './profile';
+
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   // const { rows } = await sql`SELECT * FROM mybook`;
@@ -20,21 +22,25 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
 
+  let fid:number = 0;
+  let custodyAddress:string = ""
   if (isValid) {
     accountAddress = message.interactor.verified_accounts[0];
+    fid = message.interactor.fid;
+    custodyAddress = message.interactor.custody_address;
   }
   following = message?.following;
   liked = message?.liked;
   recasted = message?.recasted;
-
-  let fid:number | undefined = 0;
-  fid = message?.interactor.fid;
   
-  const { rows } = await sql`SELECT * FROM mybook where name=${fid}`;
+  const { rows } = await sql`SELECT * FROM mybook where id=${fid}`;
+  //OKだったら突っ込むにしたい
+  let profileData = await getProfileData(fid);
+
   if(rows.length == 0){
     const insertQuery = sql`
-    INSERT INTO mybook (name)
-    VALUES (${fid})
+    INSERT INTO mybook (id, username, displayname)
+    VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName})
     `;
     const result = await insertQuery
   }
