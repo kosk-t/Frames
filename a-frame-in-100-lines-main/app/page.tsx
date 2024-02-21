@@ -49,6 +49,7 @@ class Row {
   constructor(public id: string, public userName: string, public displayName:string) {}
 }
 
+
 export default async function Page() {
   const { rows } = await sql`SELECT * FROM mybook`;
 
