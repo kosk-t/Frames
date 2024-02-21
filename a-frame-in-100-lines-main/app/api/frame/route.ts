@@ -32,18 +32,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   following = message?.following;
   liked = message?.liked;
   recasted = message?.recasted;
-  
-  const { rows } = await sql`SELECT * FROM mybook where id=${fid}`;
-  //OKだったら突っ込むにしたい
-  let profileData = await getProfileData(fid);
-
-  if(rows.length == 0){
-    const insertQuery = sql`
-    INSERT INTO mybook (id, username, displayname)
-    VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName})
-    `;
-    const result = await insertQuery
-  }
 
   let label:string = "";
   let post_url:string = "";
@@ -53,6 +41,17 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
     image_url = "/2024-02-22 00.50.21.webp";
+
+    const { rows } = await sql`SELECT * FROM mybook where id=${fid}`;
+    let profileData = await getProfileData(fid);
+
+    if(rows.length == 0){
+      const insertQuery = sql`
+      INSERT INTO mybook (id, username, displayname)
+      VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName})
+      `;
+      const result = await insertQuery
+    }
   }else{
     label = "FL&💟&🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
