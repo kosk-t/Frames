@@ -1,6 +1,7 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { AppConfig } from './config';
+import { sql } from "@vercel/postgres";
 
 const frameMetadata = getFrameMetadata({
   buttons: [
@@ -42,10 +43,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page() {
+  const { rows } = await sql`SELECT * FROM mybook`;
+
+  let name = "";
+  rows.forEach(element => {
+    name = element.name;
+  });
   return (
     <>
       <h1>Kosk Giveaway</h1>
+      ${name}
     </>
   );
 }
