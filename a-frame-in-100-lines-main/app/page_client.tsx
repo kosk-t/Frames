@@ -37,7 +37,8 @@ const App: React.FC<{data:any}> = ({data}) => {
           <DialogTitle>Winner is...</DialogTitle>
           <DialogContent>
             <p>🎉Congratulations!🎉</p>
-            <center><a href={userLink} target="_blank">fid:{winner.id} Name:{winner.displayName}</a></center>
+            <p>fid: {winner.id}</p>
+            <center><a href={userLink} target="_blank">{winner.displayName}</a></center>
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" onClick={handleCloseDialog}>
