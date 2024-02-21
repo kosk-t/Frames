@@ -55,7 +55,8 @@ export default async function Page() {
   let client_rows : Row[] = [];
 
   rows.forEach(element => {
-    client_rows.push(new Row(element.id, element.userName, element.displayName))
+    console.log(element)
+    client_rows.push(new Row(element.id, element.username, element.displayname))
   });
   const data = JSON.stringify(client_rows);
 
