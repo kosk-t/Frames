@@ -1,11 +1,14 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
-import { NEXT_PUBLIC_URL } from './config';
+import { AppConfig } from './config';
+import { Client, sql } from "@vercel/postgres";
+import React, { useState, useEffect } from "react";
+import App from './page_client';
 
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'Register Giveaway!',
+      label: 'FL&💟&🔁 Register!',
     },
     {
       action: 'link',
@@ -18,13 +21,13 @@ const frameMetadata = getFrameMetadata({
     // },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/park-3.png`,
+    src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
     aspectRatio: '1:1',
   },
   // input: {
   //   text: 'Tell me a boat story',
   // },
-  postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+  postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame`,
 });
 
 let title:string = 'Kosk Giveaway'
@@ -35,17 +38,32 @@ export const metadata: Metadata = {
   openGraph: {
     title: title,
     description: description,
-    images: [`${NEXT_PUBLIC_URL}/park-1.png`],
+    images: [`${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`],
   },
   other: {
     ...frameMetadata,
   },
 };
 
-export default function Page() {
+// サーバー側のコード
+class Row {
+  constructor(public name: string, public age: number) {}
+}
+
+export default async function Page() {
+  const { rows } = await sql`SELECT * FROM mybook`;
+
+  let client_rows : Row[] = [];
+
+  rows.forEach(element => {
+    client_rows.push(new Row(element.name, 0))
+  });
+  const data = JSON.stringify(client_rows);
+
   return (
     <>
-      <h1>Kosk Giveaway</h1>
+      <h1>Giveaway Tool</h1>
+      <App data = {data} />
     </>
   );
 }

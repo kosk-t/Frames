@@ -1,8 +1,16 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
-import { NEXT_PUBLIC_URL } from '../../config';
+import { AppConfig } from '../../config';
+import { sql } from "@vercel/postgres";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
+  // const { rows } = await sql`SELECT * FROM mybook`;
+
+  // let name = "";
+  // rows.forEach(element => {
+  //   name = element.name;
+  // });
+
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
   let liked: boolean | undefined = false;
@@ -18,12 +26,28 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   following = message?.following;
   liked = message?.liked;
   recasted = message?.recasted;
+
+  let fid:number | undefined = 0;
+  fid = message?.interactor.fid;
+  
+  const { rows } = await sql`SELECT * FROM mybook where name=${fid}`;
+  if(rows.length == 0){
+    const insertQuery = sql`
+    INSERT INTO mybook (name)
+    VALUES (${fid})
+    `;
+    const result = await insertQuery
+  }
+
   let label:string = "";
-  // if(following && liked && recasted){
-  if(true){
+  let post_url:string = "";
+  if(following && liked && recasted){
+  // if(true){
     label = "Thanks!";
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
   }else{
-    label = "Please Follow & Like & Recast, then Register Giveaway!"
+    label = "FL&💟&🔁 Register!"
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
   }
 
   // if (message?.input) {
@@ -43,11 +67,17 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         {
           label: label,
         },
+        {
+          action: 'link',
+          label: 'Follow @Kosk',
+          target: 'https://warpcast.com/kosk',
+        },
       ],
       image: {
-        src: `${NEXT_PUBLIC_URL}/park-1.png`,
+        src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
+        aspectRatio: '1:1'
       },
-      postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+      postUrl: post_url,
     }),
   );
 }
