@@ -47,14 +47,18 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   let label:string = "";
   let post_url:string = "";
+  let image_url:string = "";
   if(liked && recasted){
   // if(true){
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
+    image_url = "/2024-02-22 00.50.21.webp";
   }else{
     label = "FL&💟&🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
+    image_url = "/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp"
   }
+
 
   // if (message?.input) {
   //   text = message.input;
@@ -80,7 +84,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         },
       ],
       image: {
-        src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
+        src: `${AppConfig.NEXT_PUBLIC_URL}${image_url}`,
         aspectRatio: '1:1'
       },
       postUrl: post_url,
