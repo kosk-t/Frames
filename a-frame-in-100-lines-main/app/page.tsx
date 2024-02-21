@@ -21,7 +21,7 @@ const frameMetadata = getFrameMetadata({
     // },
   ],
   image: {
-    src: `${AppConfig.NEXT_PUBLIC_URL}/park-3.png`,
+    src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
     aspectRatio: '1:1',
   },
   // input: {
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: title,
     description: description,
-    images: [`${AppConfig.NEXT_PUBLIC_URL}/park-1.png`],
+    images: [`${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`],
   },
   other: {
     ...frameMetadata,

@@ -74,7 +74,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         },
       ],
       image: {
-        src: `${AppConfig.NEXT_PUBLIC_URL}/park-1.png`,
+        src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
       },
       postUrl: post_url,
     }),
