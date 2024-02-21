@@ -33,7 +33,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   liked = message?.liked;
   recasted = message?.recasted;
   
-  const { rows } = await sql`SELECT * FROM mybook where name=${fid}`;
+  const { rows } = await sql`SELECT * FROM mybook where id=${fid}`;
   //OKだったら突っ込むにしたい
   let profileData = await getProfileData(fid);
 
