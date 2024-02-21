@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Link, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 class Row {
-    constructor(public id: string, public userName: string, public displayName:string) {}
+  constructor(public id: string, public userName: string, public displayName:string) {}
   }
   
 const App: React.FC<{data:any}> = ({data}) => {

@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 class Row {
-  constructor(public id: string, public userName: string, displayName:string) {}
+  constructor(public id: string, public userName: string, public displayName:string) {}
 }
 
 export default async function Page() {
