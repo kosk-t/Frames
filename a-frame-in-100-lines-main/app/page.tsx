@@ -8,7 +8,7 @@ import App from './page_client';
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'Register!',
+      label: 'FL&💟&🔁 Register!',
     },
     {
       action: 'link',

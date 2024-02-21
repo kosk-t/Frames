@@ -46,7 +46,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
   }else{
-    label = "FL&💟&🔁 Register Again!"
+    label = "FL&💟&🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
   }
 
