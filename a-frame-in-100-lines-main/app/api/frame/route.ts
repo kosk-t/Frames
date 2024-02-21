@@ -2,7 +2,7 @@ import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/o
 import { NextRequest, NextResponse } from 'next/server';
 import { AppConfig } from '../../config';
 import { sql } from "@vercel/postgres";
-import { getFarcasterUserAddress } from '@coinbase/onchainkit/src/farcaster';
+import { Profile, ProfileResponse, getProfileData } from './profile';
 
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
@@ -33,15 +33,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   liked = message?.liked;
   recasted = message?.recasted;
   
-  const userAddress = await getFarcasterUserAddress(fid, {
-    neynarApiKey: 'NEYNAR_ONCHAIN_KIT', 
-  });
-  
   const { rows } = await sql`SELECT * FROM mybook where name=${fid}`;
+  //OKだったら突っ込むにしたい
+  let profileData = await getProfileData(fid);
+
   if(rows.length == 0){
     const insertQuery = sql`
     INSERT INTO mybook (name, custodyaddress)
-    VALUES (${fid}, ${custodyAddress})
+    VALUES (${fid}, ${profileData.body.username})
     `;
     const result = await insertQuery
   }
