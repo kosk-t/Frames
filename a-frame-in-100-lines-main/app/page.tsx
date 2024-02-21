@@ -68,7 +68,7 @@ const App: React.FC = () => {
   useEffect(() => {
     fetch("https://randomuser.me/api/?results=10")
       .then((res) => res.json())
-      .then((data) => setPeople(data.results.map((r) => `${r.name.first} ${r.name.last}`)));
+      .then((data) => setPeople(data.results.map((r:any) => `${r.name.first} ${r.name.last}`)));
   }, []);
 
   const handlePickWinner = () => {
