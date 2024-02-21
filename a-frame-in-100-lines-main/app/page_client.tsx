@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Link, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 class Row {
-    constructor(public name: string, public custodyaddress: string) {}
+    constructor(public id: string, public userName: string, public displayName:string) {}
   }
   
 const App: React.FC<{data:any}> = ({data}) => {
     const [people, setPeople] = useState<Row[]>([]);
     const [open, setOpen] = useState(false);
-    const [winner, setWinner] = useState("");
+    const [winner, setWinner] = useState(new Row("", "", ""));
     const [userLink, setLink] = useState("");
     
     useEffect(() => {
@@ -19,8 +19,8 @@ const App: React.FC<{data:any}> = ({data}) => {
   
     const handlePickWinner = () => {
       const winner = people[Math.floor(Math.random() * people.length)];
-      setWinner(winner.custodyaddress);
-      setLink("https://warpcast.com/" + winner.custodyaddress)
+      setWinner(winner);
+      setLink("https://warpcast.com/" + winner.userName)
       setOpen(true);
     };
   
@@ -37,7 +37,7 @@ const App: React.FC<{data:any}> = ({data}) => {
           <DialogTitle>Winner is...</DialogTitle>
           <DialogContent>
             <p>🎉Congratulations!🎉</p>
-            <a href={userLink} target="_blank">{winner}</a>
+            <center><a href={userLink} target="_blank">{winner.userName}</a></center>
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" onClick={handleCloseDialog}>
@@ -48,15 +48,17 @@ const App: React.FC<{data:any}> = ({data}) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>CustodyAddress</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell>UserName</TableCell>
+              <TableCell>DisplayName</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {people.map((person) => (
-              <TableRow key={person.name}>
-                <TableCell>{person.name}</TableCell>
-                <TableCell>{person.custodyaddress}</TableCell>
+              <TableRow key={person.id}>
+                <TableCell>{person.id}</TableCell>
+                <TableCell>{person.userName}</TableCell>
+                <TableCell>{person.displayName}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 class Row {
-  constructor(public name: string, public custodyaddress: string) {}
+  constructor(public id: string, public userName: string, displayName:string) {}
 }
 
 export default async function Page() {
@@ -55,7 +55,7 @@ export default async function Page() {
   let client_rows : Row[] = [];
 
   rows.forEach(element => {
-    client_rows.push(new Row(element.name, element.custodyaddress))
+    client_rows.push(new Row(element.id, element.userName, element.displayName))
   });
   const data = JSON.stringify(client_rows);
 
