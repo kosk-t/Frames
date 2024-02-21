@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 class Row {
-    constructor(public name: string, public age: number) {}
-}
+    constructor(public name: string, public custodyaddress: string) {}
+  }
   
 const App: React.FC<{data:any}> = ({data}) => {
     const [people, setPeople] = useState<Row[]>([]);
@@ -47,12 +47,14 @@ const App: React.FC<{data:any}> = ({data}) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>CustodyAddress</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {people.map((person) => (
               <TableRow key={person.name}>
                 <TableCell>{person.name}</TableCell>
+                <TableCell>{person.custodyaddress}</TableCell>
               </TableRow>
             ))}
           </TableBody>
