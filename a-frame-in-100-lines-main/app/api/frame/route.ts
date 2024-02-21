@@ -47,7 +47,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   let label:string = "";
   let post_url:string = "";
-  if(following && liked && recasted){
+  if(liked && recasted){
   // if(true){
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
