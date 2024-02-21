@@ -1,9 +1,9 @@
 import { getFrameMetadata } from '@coinbase/onchainkit';
 import type { Metadata } from 'next';
 import { AppConfig } from './config';
-import { sql } from "@vercel/postgres";
+import { Client, sql } from "@vercel/postgres";
 import React, { useState, useEffect } from "react";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import App from './page_client';
 
 const frameMetadata = getFrameMetadata({
   buttons: [
@@ -45,75 +45,25 @@ export const metadata: Metadata = {
   },
 };
 
-// export default async function Page() {
-//   const { rows } = await sql`SELECT * FROM mybook`;
+// サーバー側のコード
+class Row {
+  constructor(public name: string, public age: number) {}
+}
 
-//   let name = "";
-//   rows.forEach(element => {
-//     name = element.name;
-//   });
-//   return (
-//     <>
-//       <h1>Kosk Giveaway</h1>
-//       ${name}
-//     </>
-//   );
-// }
+export default async function Page() {
+  const { rows } = await sql`SELECT * FROM mybook`;
 
-const App: React.FC = () => {
-  const [people, setPeople] = useState<string[]>([]);
-  const [open, setOpen] = useState(false);
-  const [winner, setWinner] = useState("");
+  let client_rows : Row[] = [];
 
-  useEffect(() => {
-    fetch("https://randomuser.me/api/?results=10")
-      .then((res) => res.json())
-      .then((data) => setPeople(data.results.map((r:any) => `${r.name.first} ${r.name.last}`)));
-  }, []);
-
-  const handlePickWinner = () => {
-    const winner = people[Math.floor(Math.random() * people.length)];
-    setWinner(winner);
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
+  rows.forEach(element => {
+    client_rows.push(new Row(element.name, 0))
+  });
+  const data = JSON.stringify(client_rows);
 
   return (
-    <Box>
-      <Button variant="outlined" onClick={handlePickWinner}>
-        当選者を選ぶ
-      </Button>
-      <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>当選者発表！</DialogTitle>
-        <DialogContent>
-          <p>おめでとうございます！</p>
-          <p>当選者は {winner} さんです！</p>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" onClick={handleCloseDialog}>
-            閉じる
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>名前</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {people.map((person) => (
-            <TableRow key={person}>
-              <TableCell>{person}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Box>
+    <>
+      <h1>Giveaway Tool</h1>
+      <App data = {data} />
+    </>
   );
-};
-
-export default App;
+}
