@@ -47,8 +47,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
     if(rows.length == 0){
       const insertQuery = sql`
-      INSERT INTO mybook (id, username, displayname)
-      VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName})
+      INSERT INTO mybook (id, username, displayname, avatar)
+      VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
       `;
       const result = await insertQuery
     }
