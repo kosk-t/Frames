@@ -1,15 +1,15 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Link, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Link, Table, TableBody, TableCell, TableHead, TableRow, Avatar } from "@mui/material";
 
 class Row {
-  constructor(public id: string, public userName: string, public displayName:string) {}
+  constructor(public id: string, public userName: string, public displayName:string, public avatar:string) {}
   }
   
 const App: React.FC<{data:any}> = ({data}) => {
     const [people, setPeople] = useState<Row[]>([]);
     const [open, setOpen] = useState(false);
-    const [winner, setWinner] = useState(new Row("", "", ""));
+    const [winner, setWinner] = useState(new Row("", "", "", ""));
     const [userLink, setLink] = useState("");
     
     useEffect(() => {
@@ -46,9 +46,10 @@ const App: React.FC<{data:any}> = ({data}) => {
             </Button>
           </DialogActions>
         </Dialog>
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
+              <TableCell>Avatar</TableCell>
               <TableCell>ID</TableCell>
               <TableCell>UserName</TableCell>
               <TableCell>DisplayName</TableCell>
@@ -57,6 +58,7 @@ const App: React.FC<{data:any}> = ({data}) => {
           <TableBody>
             {people.map((person) => (
               <TableRow key={person.id}>
+                <TableCell><Avatar alt={person.userName} src={person.avatar} /></TableCell>
                 <TableCell>{person.id}</TableCell>
                 <TableCell>{person.userName}</TableCell>
                 <TableCell>{person.displayName}</TableCell>

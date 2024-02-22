@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 class Row {
-  constructor(public id: string, public userName: string, public displayName:string) {}
+  constructor(public id: string, public userName: string, public displayName:string, public avatar:string) {}
 }
 
 
@@ -57,7 +57,7 @@ export default async function Page() {
 
   rows.forEach(element => {
     console.log(element)
-    client_rows.push(new Row(element.id, element.username, element.displayname))
+    client_rows.push(new Row(element.id, element.username, element.displayname, element.avatar))
   });
   const data = JSON.stringify(client_rows);
 
@@ -68,3 +68,5 @@ export default async function Page() {
     </>
   );
 }
+
+export const dynamic = 'force-dynamic';
