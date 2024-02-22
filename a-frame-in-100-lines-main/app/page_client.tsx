@@ -33,12 +33,14 @@ const App: React.FC<{data:any}> = ({data}) => {
         <Button variant="outlined" onClick={handlePickWinner}>
           Select Winner
         </Button>
+        <p>Total: {people.length}</p>
         <Dialog open={open} onClose={handleCloseDialog}>
           <DialogTitle>Winner is...</DialogTitle>
           <DialogContent>
-            <p>🎉Congratulations!🎉</p>
+          <center><p>🎉Congratulations!🎉</p>
             <p>fid: {winner.id}</p>
-            <center><a href={userLink} target="_blank">{winner.displayName}</a></center>
+            <Avatar alt={winner.userName} src={winner.avatar} /><a href={userLink} target="_blank">{winner.displayName}</a>
+          </center>
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" onClick={handleCloseDialog}>
