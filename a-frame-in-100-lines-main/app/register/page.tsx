@@ -24,13 +24,13 @@
 // //   redirect("/?guid=" + resultGuid);
 // // }
 
-// export default async function Page() {
-//   // console.log("test")
-//   return (
-//     <>
-//       <App />
-//     </>
-//   );
-// }
+export default async function Page() {
+  // console.log("test")
+  return (
+    <>
+      {/* <App /> */}
+    </>
+  );
+}
 
-// // export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
