@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const generateMetadata = async ({ params, searchParams }: Props): Promise<Metadata> => {
-  const guid : string = searchParams.guid;
+  const guid : string = searchParams.guid?.toString() || "";
   const giveaway = await prisma.giveaway.findFirst({
     where:{
       guid: guid
@@ -30,8 +30,8 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
       },
       {
         action: 'link',
-        label: giveaway?.linklabel,
-        target: giveaway?.link,
+        label: giveaway?.linklabel || "",
+        target: giveaway?.link || "",
       },
       // {
       //   label: 'Redirect to pictures',
