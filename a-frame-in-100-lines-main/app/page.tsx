@@ -121,7 +121,7 @@ export default async function Page({searchParams}: {searchParams: {guid: string}
 
   rows.forEach(element => {
     // console.log(element)
-    client_rows.push(new Row(element.id, element.fid, element.username, element.displayname, element.avatar))
+    client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined))
   });
   const data = JSON.stringify(client_rows);
   const giveaway = await prisma.giveaway.findFirst({

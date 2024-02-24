@@ -1,5 +1,5 @@
 export class Row {
-    constructor(public id: number, public fid: number | null, public userName: string | null, public displayName:string | null, public avatar:string | null) {}
+    constructor(public id: number, public fid: number | undefined, public userName: string | undefined, public displayName:string | undefined, public avatar:string | undefined) {}
 }
 export interface Giveaway{
     title: string;
