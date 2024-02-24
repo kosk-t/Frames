@@ -1,23 +1,18 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { AppConfig } from '../../config';
-import { sql } from "@vercel/postgres";
+// import { sql } from "@vercel/postgres";
 import { Profile, ProfileResponse, getProfileData } from './profile';
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
-  // const { rows } = await sql`SELECT * FROM mybook`;
-
-  // let name = "";
-  // rows.forEach(element => {
-  //   name = element.name;
-  // });
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
   let liked: boolean | undefined = false;
   let recasted: boolean | undefined = false;
-  // let text: string | undefined = '';
 
   const body: FrameRequest = await req.json();
   const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
@@ -42,15 +37,28 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
     image_url = "/2024-02-22 00.50.21.webp";
 
-    const { rows } = await sql`SELECT * FROM mybook where id=${fid}`;
+    const row = prisma.mybook.findFirst({
+      where:
+      {
+        fid: fid
+      }
+    });
     let profileData = await getProfileData(fid);
 
-    if(rows.length == 0){
-      const insertQuery = sql`
-      INSERT INTO mybook (id, username, displayname, avatar)
-      VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
-      `;
-      const result = await insertQuery
+    if(row == null){
+      prisma.mybook.create({
+        data:{
+          fid: fid,
+          username: profileData.body.username,
+          displayname: profileData.body.displayName,
+          avatar: profileData.body.avatarUrl
+        }
+      })
+      // const insertQuery = sql`
+      // INSERT INTO mybook (id, username, displayname, avatar)
+      // VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
+      // `;
+      // const result = await insertQuery
     }
   }else{
     label = "FL&💟&🔁 Register!"
