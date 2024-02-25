@@ -33,7 +33,7 @@ async function createrow(guid: string, fid: number){
     console.log("get profile data")
 
     const result = await sql`
-    INSERT INTO mybook (id, username, displayname, avatar, guid)
+    INSERT INTO mybook (fid, username, displayname, avatar, guid)
     VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl}, ${guid})
     `;
     console.log("mybook inserted fid: " +fid)
