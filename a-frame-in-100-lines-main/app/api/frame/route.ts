@@ -26,11 +26,11 @@ async function createrow(guid: string, fid: number){
 
   const {rows} = await sql`SELECT * FROM mybook where id=${fid} and guid = ${guid}`;
 
-  console.log("application rows number: " + rows.length)
+  // console.log("application rows number: " + rows.length)
   if(rows.length == 0){
-    console.log("rows length 0")
+    // console.log("rows length 0")
     let profileData = await getProfileData(fid);
-    console.log("get profile data")
+    // console.log("get profile data")
 
     const result = await sql`
     INSERT INTO mybook (fid, username, displayname, avatar, guid)
@@ -87,8 +87,8 @@ async function getResponse(req: NextRequest
   let post_url:string = "";
   let image_url:string = "";
   console.log("VERCEL_ENV: " + AppConfig.VERCEL_ENV);
-  
-  if((liked && recasted) || (AppConfig.VERCEL_ENV != "produciton")){
+
+  if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
     image_url = "/2024-02-22 00.50.21.webp";
