@@ -68,7 +68,8 @@ async function getResponse(req: NextRequest,
           fid: fid,
           username: profileData.body.username,
           displayname: profileData.body.displayName,
-          avatar: profileData.body.avatarUrl
+          avatar: profileData.body.avatarUrl,
+          guid: guid,
         }
       })
       // const insertQuery = sql`
