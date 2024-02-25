@@ -15,7 +15,7 @@ async function getResponse(req: NextRequest
   // }
   ): Promise<NextResponse> {
   const guid = req.nextUrl.searchParams.get("guid");
-  console.log(guid)
+  console.log("route.ts: guid=" + guid)
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
@@ -39,7 +39,7 @@ async function getResponse(req: NextRequest
   let label:string = "";
   let post_url:string = "";
   let image_url:string = "";
-  if((liked && recasted) || (AppConfig.VERCEL_ENV == "development")){
+  if((liked && recasted) || (AppConfig.VERCEL_ENV != "produciton")){
   // if(true){
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
