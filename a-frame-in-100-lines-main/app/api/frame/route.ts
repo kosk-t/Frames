@@ -15,6 +15,7 @@ async function getResponse(req: NextRequest
   // }
   ): Promise<NextResponse> {
   const guid = req.nextUrl.searchParams.get("guid");
+  console.log(guid)
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
@@ -80,7 +81,7 @@ async function getResponse(req: NextRequest
     }
   }else{
     label = "FL&💟&🔁 Register!"
-    post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid;
     image_url = "/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp"
   }
 

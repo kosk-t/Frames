@@ -127,7 +127,7 @@ export default async function Page({searchParams}: {searchParams: {guid: string}
     client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined))
   });
   const data = JSON.stringify(client_rows);
-  const giveaway = (guid == (null || undefined))? {title: ""} : await prisma.giveaway.findFirst({
+  const giveaway = (guid == (null || undefined))? {title: "🚨Giveaway Not Found🚨"} : await prisma.giveaway.findFirst({
     where:{
       guid: searchParams.guid
     }
