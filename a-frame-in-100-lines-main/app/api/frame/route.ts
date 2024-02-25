@@ -90,7 +90,7 @@ async function getResponse(req: NextRequest
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
     image_url = "/2024-02-22 00.50.21.webp";
-    createrow(guid || "", fid);
+    await createrow(guid || "", fid);
   }else{
     label = "FL&💟&🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid;
