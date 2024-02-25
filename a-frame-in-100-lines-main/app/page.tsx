@@ -175,3 +175,5 @@ export const dynamic = 'force-dynamic';
 // DELETE FROM giveaway
 
 // 219fccd2-e6f9-40ff-adf2-b2283cd94739
+
+// select * from mybook where guid = '693c717a-046b-42b1-8bf6-40ddd7ee304e'

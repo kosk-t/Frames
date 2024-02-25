@@ -63,7 +63,8 @@ async function getResponse(req: NextRequest
     });
     let profileData = await getProfileData(fid);
 
-    if(row == null){
+    console.log(`exist ? guid = ${guid} && fid = ${fid}, row = ${row}`)
+    if(row == null || row == undefined){
       prisma.mybook.create({
         data:{
           fid: fid,
