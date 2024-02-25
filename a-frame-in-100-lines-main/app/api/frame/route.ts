@@ -97,8 +97,8 @@ async function getResponse(req: NextRequest
   let linkLabel = "";
   if(rows.length != 0){
     const giveaway = rows.at(0);
-    linkUrl = giveaway?.link || null
-    linkLabel = giveaway?.linklabel || null
+    linkUrl = giveaway?.link || ""
+    linkLabel = giveaway?.linklabel || ""
     const dbStartImage = giveaway?.startimage || null
     if(dbStartImage){
       startImage = dbStartImage;
