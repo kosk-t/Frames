@@ -93,8 +93,12 @@ async function getResponse(req: NextRequest
   const { rows } = await sql`select * from giveaway where guid=${guid}`
   let startImage = AppConfig.START_IMAGE;
   let finishImage = AppConfig.FINISH_IMAGE;
+  let linkUrl = "";
+  let linkLabel = "";
   if(rows.length != 0){
     const giveaway = rows.at(0);
+    linkUrl = giveaway?.link || ""
+    linkLabel = giveaway?.linklabel || ""
     const dbStartImage = giveaway?.startimage || null
     if(dbStartImage){
       startImage = dbStartImage;
@@ -128,8 +132,8 @@ async function getResponse(req: NextRequest
         },
         {
           action: 'link',
-          label: 'Follow @Kosk',
-          target: 'https://warpcast.com/kosk',
+          label: linkLabel,
+          target: linkUrl,
         },
       ],
       image: {
