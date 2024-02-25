@@ -3,24 +3,77 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AppConfig } from '../../config';
 import { sql } from "@vercel/postgres";
 import { Profile, ProfileResponse, getProfileData } from './profile';
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
 
-
-async function getResponse(req: NextRequest): Promise<NextResponse> {
-  // const { rows } = await sql`SELECT * FROM mybook`;
-
-  // let name = "";
-  // rows.forEach(element => {
-  //   name = element.name;
+async function createrow(guid: string, fid: number) : Promise<boolean>{
+  // const row = await prisma.mybook.findFirst({
+  //   where:{
+  //     AND: [
+  //       {
+  //         fid: {
+  //           equals: fid,
+  //         }
+  //       },
+  //       {
+  //         guid:{
+  //           equals: guid,
+  //         }
+  //       },
+  //     ]
+  //   }
   // });
+
+  const {rows} = await sql`SELECT * FROM mybook where fid=${fid} and guid = ${guid}`;
+
+  // console.log("application rows number: " + rows.length)
+  if(rows.length == 0){
+    // console.log("rows length 0")
+    let profileData = await getProfileData(fid);
+    // console.log("get profile data")
+
+    const result = await sql`
+    INSERT INTO mybook (fid, username, displayname, avatar, guid)
+    VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl}, ${guid})
+    `;
+    console.log("mybook inserted fid: " +fid)
+    return true;
+  }
+  return false;
+
+  // console.log(`exist ? guid = ${guid} && fid = ${fid}`)
+
+  // if(row == null || row == undefined){
+  //   await prisma.mybook.create({
+  //     data:{
+  //       fid: fid,
+  //       username: profileData.body.username,
+  //       displayname: profileData.body.displayName,
+  //       avatar: profileData.body.avatarUrl,
+  //       guid: guid,
+  //     }
+  //   })
+  // }
+}
+
+async function getResponse(req: NextRequest
+  // ,{
+  //   params,
+  // }: {
+  //   params: { guid: string };
+  // }
+  ): Promise<NextResponse> {
+  const guid = req.nextUrl.searchParams.get("guid");
+  console.log("route.ts: guid=" + guid)
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
   let liked: boolean | undefined = false;
   let recasted: boolean | undefined = false;
-  // let text: string | undefined = '';
 
   const body: FrameRequest = await req.json();
-  const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
+  const allowFramegear = AppConfig.VERCEL_ENV !== 'production'; 
+  const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT', allowFramegear:allowFramegear });
 
   let fid:number = 0;
   let custodyAddress:string = ""
@@ -36,40 +89,37 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   let label:string = "";
   let post_url:string = "";
   let image_url:string = "";
-  if(liked && recasted){
-  // if(true){
-    label = "Thanks!";
-    post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
-    image_url = "/2024-02-22 00.50.21.webp";
 
-    const { rows } = await sql`SELECT * FROM mybook where id=${fid}`;
-    let profileData = await getProfileData(fid);
-
-    if(rows.length == 0){
-      const insertQuery = sql`
-      INSERT INTO mybook (id, username, displayname, avatar)
-      VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
-      `;
-      const result = await insertQuery
+  const { rows } = await sql`select * from giveaway where guid=${guid}`
+  let startImage = AppConfig.START_IMAGE;
+  let finishImage = AppConfig.FINISH_IMAGE;
+  if(rows.length != 0){
+    const giveaway = rows.at(0);
+    const dbStartImage = giveaway?.startimage || null
+    if(dbStartImage){
+      startImage = dbStartImage;
     }
-  }else{
-    label = "FL&💟&🔁 Register!"
-    post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame`;
-    image_url = "/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp"
+    const dbFinishImage = giveaway?.finishimage || null
+    if(dbFinishImage){
+      finishImage = dbFinishImage;
+    }
   }
 
-
-  // if (message?.input) {
-  //   text = message.input;
-  // }
-
-  // if (message?.button === 3) {
-  //   return NextResponse.redirect(
-  //     'https://www.google.com/search?q=cute+dog+pictures&tbm=isch&source=lnms',
-  //     { status: 302 },
-  //   );
-  // }
-
+  if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
+    const result =  await createrow(guid || "", fid);
+    if(result){
+      label = "Thanks! Registered.";
+    }else{
+      label = "Already Registered.";
+    }
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
+    image_url = finishImage
+  }else{
+    label = "FL&💟&🔁 Register!"
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid;
+    image_url = startImage
+  }
+  
   return new NextResponse(
     getFrameHtmlResponse({
       buttons: [
@@ -83,7 +133,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         },
       ],
       image: {
-        src: `${AppConfig.NEXT_PUBLIC_URL}${image_url}`,
+        src: image_url,
         aspectRatio: '1:1'
       },
       postUrl: post_url,
