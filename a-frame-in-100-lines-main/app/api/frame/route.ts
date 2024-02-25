@@ -7,14 +7,14 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 
-async function getResponse(req: NextRequest,
-  {
-    params,
-  }: {
-    params: { guid: string };
-  }
+async function getResponse(req: NextRequest
+  // ,{
+  //   params,
+  // }: {
+  //   params: { guid: string };
+  // }
   ): Promise<NextResponse> {
-  const guid =  params.guid;
+  const guid = req.nextUrl.searchParams.get("guid");
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
