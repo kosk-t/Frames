@@ -45,7 +45,7 @@ async function getResponse(req: NextRequest
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
     image_url = "/2024-02-22 00.50.21.webp";
 
-    const row = prisma.mybook.findFirst({
+    const row = await prisma.mybook.findFirst({
       where:{
         AND: [
           {
@@ -62,8 +62,8 @@ async function getResponse(req: NextRequest
       }
     });
     let profileData = await getProfileData(fid);
-
     console.log(`exist ? guid = ${guid} && fid = ${fid}, row = ${row}`)
+
     if(row == null || row == undefined){
       prisma.mybook.create({
         data:{
