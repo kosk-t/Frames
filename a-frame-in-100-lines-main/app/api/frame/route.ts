@@ -42,7 +42,7 @@ async function getResponse(req: NextRequest
   if(liked && recasted){
   // if(true){
     label = "Thanks!";
-    post_url = `${AppConfig.NEXT_PUBLIC_URL}`;
+    post_url = `${AppConfig.NEXT_PUBLIC_URL}/guid=${guid}`;
     image_url = "/2024-02-22 00.50.21.webp";
 
     const row = prisma.mybook.findFirst({
