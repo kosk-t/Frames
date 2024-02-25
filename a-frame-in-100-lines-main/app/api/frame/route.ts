@@ -7,7 +7,14 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 
-async function getResponse(req: NextRequest): Promise<NextResponse> {
+async function getResponse(req: NextRequest,
+  {
+    params,
+  }: {
+    params: { guid: string };
+  }
+  ): Promise<NextResponse> {
+  const guid =  params.guid;
 
   let accountAddress: string | undefined = '';
   let following: boolean | undefined = false;
@@ -38,9 +45,19 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     image_url = "/2024-02-22 00.50.21.webp";
 
     const row = prisma.mybook.findFirst({
-      where:
-      {
-        fid: fid
+      where:{
+        AND: [
+          {
+            fid: {
+              equals: fid,
+            }
+          },
+          {
+            guid:{
+              equals: guid,
+            }
+          },
+        ]
       }
     });
     let profileData = await getProfileData(fid);

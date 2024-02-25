@@ -1,3 +1,3 @@
 export const AppConfig = {
-    NEXT_PUBLIC_URL: "https://" + process.env.VERCEL_URL
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL
 }

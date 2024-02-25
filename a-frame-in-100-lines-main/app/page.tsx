@@ -19,7 +19,9 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   const guid : string = searchParams.guid?.toString() || "";
   const giveaway = await prisma.giveaway.findFirst({
     where:{
-      guid: guid
+      guid: {
+        equals: guid
+      }
     }
   })
 
@@ -45,7 +47,7 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
     // input: {
     //   text: 'Tell me a boat story',
     // },
-    postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame`,
+    postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid,
   });
   
   let title:string = 'Kosk Giveaway'
@@ -108,7 +110,8 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
 
 export default async function Page({searchParams}: {searchParams: {guid: string}}) {
   // console.log(searchParams.guid);
-  const rows = await prisma.mybook.findMany({
+  const guid = searchParams.guid;
+  const rows = (guid == (null || undefined))? [] : await prisma.mybook.findMany({
     where:
       {
         guid: searchParams.guid
@@ -124,7 +127,7 @@ export default async function Page({searchParams}: {searchParams: {guid: string}
     client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined))
   });
   const data = JSON.stringify(client_rows);
-  const giveaway = await prisma.giveaway.findFirst({
+  const giveaway = (guid == (null || undefined))? {title: ""} : await prisma.giveaway.findFirst({
     where:{
       guid: searchParams.guid
     }
