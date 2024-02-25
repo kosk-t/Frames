@@ -28,7 +28,7 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   const giveaway = rows.at(0);
   let buttonLabel = 'FL&💟&🔁 Register!'
   const isExistsGiveaway:boolean = !(rows.length == 0)
-  if(isExistsGiveaway){
+  if(isExistsGiveaway == false){
     buttonLabel = "Giveaway not found."
   }
 
