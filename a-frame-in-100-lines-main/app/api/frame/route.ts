@@ -6,6 +6,43 @@ import { Profile, ProfileResponse, getProfileData } from './profile';
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+async function createrow(guid: string, fid: number){
+  const row = await prisma.mybook.findFirst({
+    where:{
+      AND: [
+        {
+          fid: {
+            equals: fid,
+          }
+        },
+        {
+          guid:{
+            equals: guid,
+          }
+        },
+      ]
+    }
+  });
+  let profileData = await getProfileData(fid);
+  console.log(`exist ? guid = ${guid} && fid = ${fid}, row = ${row}`)
+
+  if(row == null || row == undefined){
+    await prisma.mybook.create({
+      data:{
+        fid: fid,
+        username: profileData.body.username,
+        displayname: profileData.body.displayName,
+        avatar: profileData.body.avatarUrl,
+        guid: guid,
+      }
+    })
+    // const insertQuery = sql`
+    // INSERT INTO mybook (id, username, displayname, avatar)
+    // VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
+    // `;
+    // const result = await insertQuery
+  }
+}
 
 async function getResponse(req: NextRequest
   // ,{
@@ -44,42 +81,7 @@ async function getResponse(req: NextRequest
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
     image_url = "/2024-02-22 00.50.21.webp";
-
-    const row = await prisma.mybook.findFirst({
-      where:{
-        AND: [
-          {
-            fid: {
-              equals: fid,
-            }
-          },
-          {
-            guid:{
-              equals: guid,
-            }
-          },
-        ]
-      }
-    });
-    let profileData = await getProfileData(fid);
-    console.log(`exist ? guid = ${guid} && fid = ${fid}, row = ${row}`)
-
-    if(row == null || row == undefined){
-      prisma.mybook.create({
-        data:{
-          fid: fid,
-          username: profileData.body.username,
-          displayname: profileData.body.displayName,
-          avatar: profileData.body.avatarUrl,
-          guid: guid,
-        }
-      })
-      // const insertQuery = sql`
-      // INSERT INTO mybook (id, username, displayname, avatar)
-      // VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
-      // `;
-      // const result = await insertQuery
-    }
+    createrow(guid || "", fid);
   }else{
     label = "FL&💟&🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid;

@@ -11,7 +11,7 @@
 // export async function handleSubmit(data: Giveaway, formData: FormData) {
 //   const guid = uuidv4();
 //   // console.log(title)
-//   const result = prisma.giveaway.create({
+//   const result = await prisma.giveaway.create({
 //     data:{
 //       guid: guid,
 //       title: data.title,
