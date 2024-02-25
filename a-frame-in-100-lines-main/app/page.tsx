@@ -3,12 +3,11 @@ import type { Metadata } from 'next';
 import { AppConfig } from './config';
 import App from './page_client';
 import { Row } from './types';
-import { PrismaClient } from '@prisma/client'
+import { sql } from "@vercel/postgres";
+// import { PrismaClient } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server';
 import { getuid } from 'process';
 import { useRouter } from "next/router";
-
-const prisma = new PrismaClient()
 
 type Props = {
   params: { id: string };
@@ -17,13 +16,14 @@ type Props = {
 
 export const generateMetadata = async ({ params, searchParams }: Props): Promise<Metadata> => {
   const guid : string = searchParams.guid?.toString() || "";
-  const giveaway = await prisma.giveaway.findFirst({
-    where:{
-      guid: {
-        equals: guid
-      }
-    }
-  })
+  // const giveaway = await prisma.giveaway.findFirst({
+  //   where:{
+  //     guid: {
+  //       equals: guid
+  //     }
+  //   }
+  // })
+  let giveaway: any = await sql`select * from giveaway where guid=${guid}`
 
   const frameMetadata =  getFrameMetadata({
     buttons: [
@@ -67,71 +67,28 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   }
 }
 
-
-// const frameMetadata = getFrameMetadata({
-//   buttons: [
-//     {
-//       label: 'FL&💟&🔁 Register!',
-//     },
-//     {
-//       action: 'link',
-//       label: 'Follow @Kosk',
-//       target: 'https://warpcast.com/kosk',
-//     },
-//     // {
-//     //   label: 'Redirect to pictures',
-//     //   action: 'post_redirect',
-//     // },
-//   ],
-//   image: {
-//     src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
-//     aspectRatio: '1:1',
-//   },
-//   // input: {
-//   //   text: 'Tell me a boat story',
-//   // },
-//   postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame`,
-// });
-
-// let title:string = 'Kosk Giveaway'
-// let description:string = 'Enjoy!'
-// export const metadata: Metadata = {
-//   title: title,
-//   description: description,
-//   openGraph: {
-//     title: title,
-//     description: description,
-//     images: [`${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`],
-//   },
-//   other: {
-//     ...frameMetadata,
-//   },
-// };
-
 export default async function Page({searchParams}: {searchParams: {guid: string}}) {
   // console.log(searchParams.guid);
   const guid = searchParams.guid;
-  const rows = (guid == (null || undefined))? [] : await prisma.mybook.findMany({
-    where:
-      {
-        guid: searchParams.guid
-      }
-    }
-  );
+  const {rows} = await sql`SELECT * FROM mybook where guid=${guid}`;
 
   let client_rows : Row[] = [];
   // console.log(AppConfig.NEXT_PUBLIC_URL)
 
   rows.forEach(element => {
     // console.log(element)
-    client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined))
+    client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined, element.guid || undefined))
   });
   const data = JSON.stringify(client_rows);
-  const giveaway = (guid == (null || undefined))? {title: "🚨Giveaway Not Found🚨"} : await prisma.giveaway.findFirst({
-    where:{
-      guid: searchParams.guid
-    }
-  })
+  let giveaway: any = await sql`select * from giveaway where guid=${guid}`
+  if(giveaway.rowCount == 0){
+    giveaway = {title: "🚨Giveaway Not Found🚨"}
+  }
+  // const giveaway = (guid == (null || undefined))? {title: "🚨Giveaway Not Found🚨"} : await prisma.giveaway.findFirst({
+  //   where:{
+  //     guid: searchParams.guid
+  //   }
+  // })
 
   return (
     <>

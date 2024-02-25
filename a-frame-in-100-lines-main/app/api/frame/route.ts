@@ -1,47 +1,54 @@
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { AppConfig } from '../../config';
-// import { sql } from "@vercel/postgres";
+import { sql } from "@vercel/postgres";
 import { Profile, ProfileResponse, getProfileData } from './profile';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
 
 async function createrow(guid: string, fid: number){
-  const row = await prisma.mybook.findFirst({
-    where:{
-      AND: [
-        {
-          fid: {
-            equals: fid,
-          }
-        },
-        {
-          guid:{
-            equals: guid,
-          }
-        },
-      ]
-    }
-  });
-  let profileData = await getProfileData(fid);
-  console.log(`exist ? guid = ${guid} && fid = ${fid}, row = ${row}`)
+  // const row = await prisma.mybook.findFirst({
+  //   where:{
+  //     AND: [
+  //       {
+  //         fid: {
+  //           equals: fid,
+  //         }
+  //       },
+  //       {
+  //         guid:{
+  //           equals: guid,
+  //         }
+  //       },
+  //     ]
+  //   }
+  // });
 
-  if(row == null || row == undefined){
-    await prisma.mybook.create({
-      data:{
-        fid: fid,
-        username: profileData.body.username,
-        displayname: profileData.body.displayName,
-        avatar: profileData.body.avatarUrl,
-        guid: guid,
-      }
-    })
-    // const insertQuery = sql`
-    // INSERT INTO mybook (id, username, displayname, avatar)
-    // VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl})
-    // `;
-    // const result = await insertQuery
+  const { rows } = await sql`SELECT * FROM mybook where id=${fid} and guid = ${guid}`;
+
+  if(rows.length == 0){
+    let profileData = await getProfileData(fid);
+
+    const insertQuery = sql`
+    INSERT INTO mybook (id, username, displayname, avatar, guid)
+    VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl}, ${guid})
+    `;
+    const result = await insertQuery
   }
+
+  // console.log(`exist ? guid = ${guid} && fid = ${fid}`)
+
+  // if(row == null || row == undefined){
+  //   await prisma.mybook.create({
+  //     data:{
+  //       fid: fid,
+  //       username: profileData.body.username,
+  //       displayname: profileData.body.displayName,
+  //       avatar: profileData.body.avatarUrl,
+  //       guid: guid,
+  //     }
+  //   })
+  // }
 }
 
 async function getResponse(req: NextRequest
