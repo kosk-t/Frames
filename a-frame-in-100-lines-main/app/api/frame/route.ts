@@ -39,8 +39,8 @@ async function getResponse(req: NextRequest
   let label:string = "";
   let post_url:string = "";
   let image_url:string = "";
-  // if(liked && recasted){
-  if(true){
+  if((liked && recasted) || (AppConfig.VERCEL_ENV == "development")){
+  // if(true){
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
     image_url = "/2024-02-22 00.50.21.webp";
