@@ -27,7 +27,8 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   // let registered: any = await sql`select * from mybook where guid=${guid}`
   const giveaway = rows.at(0);
   let buttonLabel = 'FL&💟&🔁 Register!'
-  if(rows.length == 0){
+  const isExistsGiveaway:boolean = !(rows.length == 0)
+  if(isExistsGiveaway){
     buttonLabel = "Giveaway not found."
   }
 
@@ -62,7 +63,7 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
     // input: {
     //   text: 'Tell me a boat story',
     // },
-    postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid,
+    postUrl: isExistsGiveaway? `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid : "/",
   });
   
   let title:string = giveaway?.title || "";
