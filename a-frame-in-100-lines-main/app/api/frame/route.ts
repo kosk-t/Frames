@@ -24,7 +24,7 @@ async function createrow(guid: string, fid: number){
   //   }
   // });
 
-  const {rows} = await sql`SELECT * FROM mybook where id=${fid} and guid = ${guid}`;
+  const {rows} = await sql`SELECT * FROM mybook where fid=${fid} and guid = ${guid}`;
 
   // console.log("application rows number: " + rows.length)
   if(rows.length == 0){
@@ -86,7 +86,7 @@ async function getResponse(req: NextRequest
   let label:string = "";
   let post_url:string = "";
   let image_url:string = "";
-  console.log("VERCEL_ENV: " + AppConfig.VERCEL_ENV);
+  // console.log("VERCEL_ENV: " + AppConfig.VERCEL_ENV);
 
   if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
     label = "Thanks!";
