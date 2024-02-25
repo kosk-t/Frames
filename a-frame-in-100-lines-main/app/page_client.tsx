@@ -6,7 +6,7 @@ import { Row } from './types';
 const App: React.FC<{data:any}> = ({data}) => {
     const [people, setPeople] = useState<Row[]>([]);
     const [open, setOpen] = useState(false);
-    const [winner, setWinner] = useState(new Row(0, 0, "", "", ""));
+    const [winner, setWinner] = useState(new Row(0, 0, "", "", "", ""));
     const [userLink, setLink] = useState("");
     const [warpcastLink, setWarpcastLink] = useState("");
     
