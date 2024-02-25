@@ -5,6 +5,8 @@ export interface Giveaway{
     title: string;
     link: string;
     linkLabel: string;
+    startImage: string;
+    finishImage: string;
 }
 export interface User {
     id: number;

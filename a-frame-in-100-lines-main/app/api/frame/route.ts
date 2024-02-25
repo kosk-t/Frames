@@ -6,7 +6,7 @@ import { Profile, ProfileResponse, getProfileData } from './profile';
 // import { PrismaClient } from '@prisma/client'
 // const prisma = new PrismaClient()
 
-async function createrow(guid: string, fid: number){
+async function createrow(guid: string, fid: number) : Promise<boolean>{
   // const row = await prisma.mybook.findFirst({
   //   where:{
   //     AND: [
@@ -37,7 +37,9 @@ async function createrow(guid: string, fid: number){
     VALUES (${fid}, ${profileData.body.username}, ${profileData.body.displayName}, ${profileData.body.avatarUrl}, ${guid})
     `;
     console.log("mybook inserted fid: " +fid)
+    return true;
   }
+  return false;
 
   // console.log(`exist ? guid = ${guid} && fid = ${fid}`)
 
@@ -70,7 +72,8 @@ async function getResponse(req: NextRequest
   let recasted: boolean | undefined = false;
 
   const body: FrameRequest = await req.json();
-  const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT' });
+  const allowFramegear = AppConfig.VERCEL_ENV !== 'production'; 
+  const { isValid, message } = await getFrameMessage(body, { neynarApiKey: 'NEYNAR_ONCHAIN_KIT', allowFramegear:allowFramegear });
 
   let fid:number = 0;
   let custodyAddress:string = ""
@@ -86,31 +89,37 @@ async function getResponse(req: NextRequest
   let label:string = "";
   let post_url:string = "";
   let image_url:string = "";
-  // console.log("VERCEL_ENV: " + AppConfig.VERCEL_ENV);
+
+  const { rows } = await sql`select * from giveaway where guid=${guid}`
+  let startImage = AppConfig.START_IMAGE;
+  let finishImage = AppConfig.FINISH_IMAGE;
+  if(rows.length != 0){
+    const giveaway = rows.at(0);
+    const dbStartImage = giveaway?.startimage || null
+    if(dbStartImage){
+      startImage = dbStartImage;
+    }
+    const dbFinishImage = giveaway?.finishimage || null
+    if(dbFinishImage){
+      finishImage = dbFinishImage;
+    }
+  }
 
   if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
-    label = "Thanks!";
+    const result =  await createrow(guid || "", fid);
+    if(result){
+      label = "Thanks! Registered.";
+    }else{
+      label = "Already Registered.";
+    }
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
-    image_url = "/2024-02-22 00.50.21.webp";
-    await createrow(guid || "", fid);
+    image_url = finishImage
   }else{
     label = "FL&💟&🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid;
-    image_url = "/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp"
+    image_url = startImage
   }
-
-
-  // if (message?.input) {
-  //   text = message.input;
-  // }
-
-  // if (message?.button === 3) {
-  //   return NextResponse.redirect(
-  //     'https://www.google.com/search?q=cute+dog+pictures&tbm=isch&source=lnms',
-  //     { status: 302 },
-  //   );
-  // }
-
+  
   return new NextResponse(
     getFrameHtmlResponse({
       buttons: [
@@ -124,7 +133,7 @@ async function getResponse(req: NextRequest
         },
       ],
       image: {
-        src: `${AppConfig.NEXT_PUBLIC_URL}${image_url}`,
+        src: image_url,
         aspectRatio: '1:1'
       },
       postUrl: post_url,

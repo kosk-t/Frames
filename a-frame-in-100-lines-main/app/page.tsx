@@ -26,10 +26,24 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   const { rows } = await sql`select * from giveaway where guid=${guid}`
   // let registered: any = await sql`select * from mybook where guid=${guid}`
   const giveaway = rows.at(0);
+  let buttonLabel = 'FL&💟&🔁 Register!'
+  if(rows.length == 0){
+    buttonLabel = "Giveaway not found."
+  }
+
+
+  let startImage = AppConfig.START_IMAGE;
+  if(rows.length != 0){
+    const dbStartImage = giveaway?.startimage || null
+    if(dbStartImage){
+      startImage = dbStartImage;
+    }
+  }
+
   const frameMetadata =  getFrameMetadata({
     buttons: [
       {
-        label: 'FL&💟&🔁 Register!',
+        label: buttonLabel,
       },
       {
         action: 'link',
@@ -42,7 +56,7 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
       // },
     ],
     image: {
-      src: `${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`,
+      src: startImage,
       aspectRatio: '1:1',
     },
     // input: {
@@ -51,8 +65,8 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
     postUrl: `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid,
   });
   
-  let title:string = 'Kosk Giveaway'
-  let description:string = 'Enjoy!'
+  let title:string = giveaway?.title || "";
+  let description:string = 'Giveaway tool made by Kosk'
 
   return {
     title: title,
@@ -60,7 +74,7 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
     openGraph: {
       title: title,
       description: description,
-      images: [`${AppConfig.NEXT_PUBLIC_URL}/20ef4c3c-406d-4d5d-83e6-2cb62bf70f0a.webp`],
+      images: [startImage],
     },
     other: {
       ...frameMetadata,
