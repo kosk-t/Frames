@@ -31,7 +31,7 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <center><h1>Register your giveaway</h1></center>
+      <center><h1>Create your giveaway</h1></center>
       <form> 
       <Container maxWidth="sm" sx={{ pt: 5 }}>
       <Stack spacing={3} useFlexGap>
