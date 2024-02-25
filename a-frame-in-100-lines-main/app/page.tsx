@@ -23,8 +23,9 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   //     }
   //   }
   // })
-  let giveaway: any = await sql`select * from giveaway where guid=${guid}`
-
+  const { rows } = await sql`select * from giveaway where guid=${guid}`
+  // let registered: any = await sql`select * from mybook where guid=${guid}`
+  const giveaway = rows.at(0);
   const frameMetadata =  getFrameMetadata({
     buttons: [
       {
@@ -70,18 +71,20 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
 export default async function Page({searchParams}: {searchParams: {guid: string}}) {
   // console.log(searchParams.guid);
   const guid = searchParams.guid;
-  const {rows} = await sql`SELECT * FROM mybook where guid=${guid}`;
-
   let client_rows : Row[] = [];
-  // console.log(AppConfig.NEXT_PUBLIC_URL)
+  {
+    const {rows} = await sql`SELECT * FROM mybook where guid=${guid}`;
+    // console.log(AppConfig.NEXT_PUBLIC_URL)
 
-  rows.forEach(element => {
-    // console.log(element)
-    client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined, element.guid || undefined))
-  });
+    rows.forEach(element => {
+      // console.log(element)
+      client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined, element.guid || undefined))
+    });
+  }
   const data = JSON.stringify(client_rows);
-  let giveaway: any = await sql`select * from giveaway where guid=${guid}`
-  if(giveaway.rowCount == 0){
+  const {rows} = await sql`select * from giveaway where guid=${guid}`
+  let giveaway = rows.at(0)
+  if(rows.length == 0){
     giveaway = {title: "🚨Giveaway Not Found🚨"}
   }
   // const giveaway = (guid == (null || undefined))? {title: "🚨Giveaway Not Found🚨"} : await prisma.giveaway.findFirst({

@@ -24,7 +24,7 @@ async function createrow(guid: string, fid: number){
   //   }
   // });
 
-  const { rows } = await sql`SELECT * FROM mybook where id=${fid} and guid = ${guid}`;
+  const {rows} = await sql`SELECT * FROM mybook where id=${fid} and guid = ${guid}`;
 
   if(rows.length == 0){
     let profileData = await getProfileData(fid);
