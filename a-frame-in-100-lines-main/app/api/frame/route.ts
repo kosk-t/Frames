@@ -86,6 +86,8 @@ async function getResponse(req: NextRequest
   let label:string = "";
   let post_url:string = "";
   let image_url:string = "";
+  console.log("VERCEL_ENV: " + AppConfig.VERCEL_ENV);
+  
   if((liked && recasted) || (AppConfig.VERCEL_ENV != "produciton")){
     label = "Thanks!";
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;

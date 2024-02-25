@@ -78,7 +78,13 @@ export default async function Page({searchParams}: {searchParams: {guid: string}
 
     rows.forEach(element => {
       // console.log(element)
-      client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined, element.guid || undefined))
+      const existingRow = client_rows.find(
+        (row) =>
+        element.fid === row.fid
+      );
+      if(!existingRow){
+        client_rows.push(new Row(element.id, element.fid || undefined, element.username || undefined, element.displayname || undefined, element.avatar || undefined, element.guid || undefined))
+      }
     });
   }
   const data = JSON.stringify(client_rows);
