@@ -119,7 +119,7 @@ async function getResponse(req: NextRequest
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/?guid=${guid}`;
     image_url = finishImage
   }else{
-    label = "FL&💟&🔁 Register!"
+    label = "FL💟🔁 Register!"
     post_url = `${AppConfig.NEXT_PUBLIC_URL}/api/frame/?guid=` + guid;
     image_url = startImage
   }
