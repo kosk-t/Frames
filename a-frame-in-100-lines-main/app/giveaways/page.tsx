@@ -8,6 +8,7 @@ import { AppConfig } from '../config';
 export default async function Page() {
   const { rows } = await sql`
   SELECT
+  giveaway.id,
   giveaway.guid,
   giveaway.title,
   giveaway.link,
@@ -17,11 +18,12 @@ export default async function Page() {
   COUNT(mybook.id) AS child_count
   FROM giveaway
   LEFT JOIN mybook ON giveaway.guid = mybook.guid
-  GROUP BY giveaway.guid, giveaway.title, giveaway.link, giveaway.linklabel, giveaway.startimage, giveaway.finishimage
+  GROUP BY giveaway.id, giveaway.guid, giveaway.title, giveaway.link, giveaway.linklabel, giveaway.startimage, giveaway.finishimage
   `
   let client_rows : Giveaway[] = [];
   rows.forEach(element => {
       client_rows.push({
+        id: element.id,
         guid: element.guid,
         title: element.title,
         link: element.link,
@@ -32,6 +34,7 @@ export default async function Page() {
         giveawayurl: AppConfig.NEXT_PUBLIC_URL + "/?guid=" + element.guid,
       })
     });
+  client_rows.sort((a, b) => a.id - b.id)
   const data = JSON.stringify(client_rows);
 
   // console.log("test")
