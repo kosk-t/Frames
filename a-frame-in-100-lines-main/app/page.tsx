@@ -26,7 +26,7 @@ export const generateMetadata = async ({ params, searchParams }: Props): Promise
   const { rows } = await sql`select * from giveaway where guid=${guid}`
   // let registered: any = await sql`select * from mybook where guid=${guid}`
   const giveaway = rows.at(0);
-  let buttonLabel = 'FL&💟&🔁 Register!'
+  let buttonLabel = 'FL💟🔁 Register!'
   const isExistsGiveaway:boolean = !(rows.length == 0)
   if(isExistsGiveaway == false){
     buttonLabel = "Giveaway not found."
