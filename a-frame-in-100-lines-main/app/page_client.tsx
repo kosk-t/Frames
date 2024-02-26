@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Link, Table, TableBody, TableCell, TableHead, TableRow, Avatar } from "@mui/material";
 import { Row } from './types';
   
-const App: React.FC<{data:any}> = ({data}) => {
+const App: React.FC<{data:string}> = ({data}) => {
     const [people, setPeople] = useState<Row[]>([]);
     const [open, setOpen] = useState(false);
     const [winner, setWinner] = useState(new Row(0, 0, "", "", "", ""));

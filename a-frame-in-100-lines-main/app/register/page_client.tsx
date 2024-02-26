@@ -14,7 +14,7 @@ const App: React.FC = () => {
   
   const handleSubmit = async (e:any) => {
     e.preventDefault()
-    const giveaway: Giveaway = {title: title, link: link, linkLabel: linkLabel, startImage: startImage, finishImage: finishImage}
+    const giveaway: Giveaway = {guid:"", title: title, link: link, linkLabel: linkLabel, startImage: startImage, finishImage: finishImage, childCount:0, giveawayurl:""}
     const res = await fetch('/register/new', {
       method: 'POST',
       headers: {
