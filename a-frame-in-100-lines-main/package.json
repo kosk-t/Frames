@@ -19,6 +19,7 @@
     "@mui/material": "^5.15.10",
     "@prisma/client": "^5.10.2",
     "@vercel/postgres": "^0.7.2",
+    "@vercel/speed-insights": "^1.0.10",
     "graphql": "14",
     "graphql-request": "6",
     "install": "^0.13.0",
