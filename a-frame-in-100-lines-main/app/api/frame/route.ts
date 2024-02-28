@@ -82,6 +82,7 @@ async function getResponse(req: NextRequest
     fid = message.interactor.fid;
     custodyAddress = message.interactor.custody_address;
   }
+  console.log(message);
   following = message?.following;
   liked = message?.liked;
   recasted = message?.recasted;
