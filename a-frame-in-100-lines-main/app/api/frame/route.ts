@@ -108,7 +108,7 @@ async function getResponse(req: NextRequest
       finishImage = dbFinishImage;
     }
   }
-
+  console.log(`fid: ${fid}, like: ${liked}, recasted: ${recasted}`)
   if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
     const result =  await createrow(guid || "", fid);
     if(result){
