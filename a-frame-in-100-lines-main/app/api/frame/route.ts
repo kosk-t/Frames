@@ -109,7 +109,8 @@ async function getResponse(req: NextRequest
     }
   }
   console.log(`fid: ${fid}, like: ${liked}, recasted: ${recasted}`)
-  if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
+  // if((liked && recasted) || (AppConfig.VERCEL_ENV != "production")){
+  if(true){
     const result =  await createrow(guid || "", fid);
     if(result){
       label = "Thanks! Registered.";
